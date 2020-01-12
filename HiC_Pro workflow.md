@@ -1,8 +1,8 @@
 > First attempt to use HiC-Pro to finish a 3D genome analysis
+> HiCPro document: http://nservant.github.io/HiC-Pro/
 
 # Content
-1. Install HiC-Pro and dependencies
-	
+1. Install HiC-Pro and dependencies	
 2. Download data and preprocess
 3. Setting the configuration file
 4. About the output
@@ -101,6 +101,45 @@ bin=/public/.../HiC-Pro_2.10.0/HiC-Pro/bin/utils/digest_genome.py  # use digest_
 $bin -r C^CATGG  -o  hg19.bed ../ref/hg19.fa 
 ```
 #### genome size 
+- If you use hg19 as reference, hicpro provides some config files(like ```chrom_hg19.sizes```) 
 
+# 3. Setting the configuration file and Run
+> **every time you run the pipeline you should create a configuration file.**See the manual for details about the configuration file
 
+#### Step1: edit your config file
+1. Copy and edit the configuration file "config-hicpro.txt" in your local folder. 
+2. Put all input files in a rawdata folder. The input files have to be organized with a folder per sample.
+3. Use ```qsub``` to submit your pbs script
+> I have provide my file as example (see)
+```
+# the basic context of config file
+HiC-Pro -i FULL_PATH_TO_RAW_DATA -o FULL_PATH_TO_OUTPUTS -c MY_LOCAL_CONFIG_FILE -p
+```
+#### Step2: qsub the files generated
+- You will get message like this and do as the guidance.
+```
+Please run HiC-Pro in two steps :
+1- The following command will launch the parallel workflow through 12 torque jobs:
+qsub HiCPro_step1.sh
+2- The second command will merge all outputs to generate the contact maps:
+qsub HiCPro_step2.sh
+```
+
+# 4. Results
+- The results provide:
+1. mapping results
+2. contact map(matrix form)
+
+# 5. Visualization with HiCPlotter
+#### Install HiCPlotter
+> kcakdemir/HiCPlotter: https://github.com/kcakdemir/HiCPlotter/releases
+
+#### Visualization
+- Notice that **the output(.png) will be placed in home directory instead of the working directory**(Still don't find solution)
+- It has lots of optional parameters
+- I have uploaded my file as example (see:)
+```
+# basic grammar
+python HiCPlotter.py -f file -n name -chr chrX -o output
+```
 
